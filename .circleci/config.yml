@@ -1,0 +1,28 @@
+version: 2.1
+orbs:
+  node: circleci/node@4.2.0
+jobs:
+  frontend:
+    working_directory: ~/app/udagram-frontend
+    executor: node/default
+    steps:
+      - checkout:
+          path: ~/app
+      - node/install-packages:
+          app-dir: ~/app/udagram-frontend
+      - run: npm run build
+  server:
+    working_directory: ~/app/udagram-api
+    executor: node/default
+    steps:
+      - checkout:
+          path: ~/app
+      - node/install-packages:
+          app-dir: ~/app/udagram-api
+      - run: npm run build
+
+workflows:
+  build:
+    jobs:
+      - frontend
+      - server
