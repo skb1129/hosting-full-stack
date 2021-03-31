@@ -20,6 +20,8 @@ jobs:
       - node/install-packages:
           app-dir: ~/app/udagram-api
       - run: npm run build
+      - run: printenv > www/.env
+      - run: npm run archive
 
 workflows:
   build:
