@@ -14,7 +14,7 @@ jobs:
       - run:
           name: Build Frontend
           command: npm run build
-      - aws-cli/setup
+      - aws-cli/install
       - run:
           name: Deploy Frontend
           command: aws s3 cp --recursive --acl public-read ./www $S3_BUCKET_FRONTEND
@@ -26,9 +26,16 @@ jobs:
           path: ~/app
       - node/install-packages:
           app-dir: ~/app/udagram-api
-      - run: npm run build
-      - run: printenv > www/.env
-      - run: npm run archive
+      - run:
+          name: Build and Archive Server
+          command: |-
+            npm run build
+            printenv > www/.env
+            npm run archive
+      - aws-cli/install
+      - run:
+          name: Deploy Server
+          command: aws s3 cp ./www/Archive.zip $S3_BUCKET_SERVER
 
 workflows:
   build_and_deploy:
